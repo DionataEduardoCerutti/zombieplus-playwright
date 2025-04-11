@@ -29,4 +29,4 @@ npx playwright show-report
 ```
 
 <hr>
-Curso disponível em https://qaxperience.com
+Meu linkedin https://www.linkedin.com/in/dionata-eduardo-cerutti
