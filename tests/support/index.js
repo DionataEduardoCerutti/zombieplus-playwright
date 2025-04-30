@@ -1,19 +1,33 @@
 const { test : base, expect } = require('@playwright/test')
 
-const { LoginPage } = require('../pages/LoginPage')
-const { Toast } = require('../pages/Components')
-const { MoviesPage } = require('../pages/MoviesPage')
-const { LandingPage } = require('../pages/landingPage');
+const { Login } = require('./actions/Login')
+const { Popup } = require('./actions/Components')
+const { Movies } = require('./actions/Movies')
+const { Tvshows } = require('./actions/Tvshows')
+const { Leads } = require('./actions/Leads');
+
+const {Api} = require('./api')
 
 const test = base.extend({
     page: async ({page}, use) => {
-        await use({
-            ...page, //o contexto page vai ter todos os recursos do contexto original do page e mais o que eu adicionar abaix
-            landing: new LandingPage(page),
-            login: new LoginPage(page),
-            movies: new MoviesPage(page),
-            toast: new Toast(page)
-        })
+        
+        const context = page 
+
+        context['leads'] = new Leads(page)
+        context['login'] = new Login(page)
+        context['movies'] = new Movies(page)
+        context['tvshows'] = new Tvshows(page)
+        context['popup'] = new Popup(page)
+
+        await use(context)
+    },
+    request: async({request}, use) => {
+        const context = request
+        context['api'] = new Api(request)
+
+        await context['api'].setToken()
+        
+        await use(context)
     }
 })
 
